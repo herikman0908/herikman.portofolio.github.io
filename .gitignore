@@ -1,0 +1,39 @@
+# ===== OS (Sistem Operasi) =====
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ===== Editor & IDE =====
+.vscode/
+.idea/
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+
+# ===== Dependencies & Build (Jika nanti pakai Node.js) =====
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# ===== Vercel & Next.js =====
+.vercel
+.next
+out
+
+# ===== Environment Variables (PENTING: Rahasia) =====
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# ===== Logs =====
+logs
+*.log
