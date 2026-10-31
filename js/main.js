@@ -327,25 +327,54 @@ const contactForm = document.getElementById('contactForm');
 const toast = document.getElementById('toast');
 
 function showToast(message, type = 'success') {
+  if (!toast) return;
   toast.textContent = message;
   toast.className = `toast show ${type}`;
   setTimeout(() => toast.classList.remove('show'), 3500);
 }
 
-contactForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const btn = contactForm.querySelector('button');
-  const originalHTML = btn.innerHTML;
-  btn.innerHTML = 'Mengirim...';
-  btn.disabled = true;
-  setTimeout(() => {
-    btn.innerHTML = originalHTML;
-    btn.disabled = false;
-    contactForm.reset();
-    showToast('✅ Pesan berhasil dikirim! Saya akan segera membalas.');
-  }, 1200);
-});
+if (contactForm) {
+  contactForm.addEventListener('submit', async (e) => {
+    e.preventDefault(); // Mencegah halaman reload
 
+    const btn = contactForm.querySelector('button[type="submit"]');
+    const originalHTML = btn.innerHTML;
+
+    // Ubah tombol jadi loading
+    btn.innerHTML = 'Mengirim...';
+    btn.disabled = true;
+
+    // Ambil semua data dari form
+    const formData = new FormData(contactForm);
+
+    try {
+      // Proses pengiriman ke Formspree
+      const response = await fetch(contactForm.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        // JIKA BERHASIL
+        contactForm.reset();
+        showToast('✅ Pesan berhasil dikirim! Saya akan segera membalas.', 'success');
+      } else {
+        // JIKA GAGAL DARI SERVER FORMSPREE
+        showToast('❌ Gagal mengirim pesan. Silakan coba lagi.', 'error');
+      }
+    } catch (error) {
+      // JIKA GAGAL KARENA KONEKSI INTERNET DLL
+      showToast('❌ Terjadi kesalahan jaringan.', 'error');
+    } finally {
+      // Kembalikan tombol ke keadaan semula
+      btn.innerHTML = originalHTML;
+      btn.disabled = false;
+    }
+  });
+}
   /* ===== 18. Download CV ===== */
   // const downloadCV = document.getElementById('downloadCV');
   // if (downloadCV) {
